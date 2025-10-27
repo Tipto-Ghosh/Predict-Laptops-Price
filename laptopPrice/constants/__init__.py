@@ -13,7 +13,7 @@ FILE_NAME = "laptop.csv" # Raw data file name
 
 PIPELINE_NAME : str = "laptop_price"
 
-ARTIFACT_DIR : str = "artifact"
+ARTIFACT_DIR : str = "artifacts"
 
 TRAIN_FILE_NAME = "train.csv"
 TEST_FILE_NAME = "test.csv"
