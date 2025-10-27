@@ -33,7 +33,7 @@ class LaptopData:
         """
         
         try:
-            collection = self.mongo_client.client[collection_name]
+            collection = self.mongo_client.database[collection_name]
             
             # get all the data and convert them into dataframe
             df = pd.DataFrame(list(collection.find()))
