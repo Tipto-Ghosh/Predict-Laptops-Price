@@ -232,7 +232,7 @@ def save_yaml_file(file_path: str, data: dict):
         logging.error(f"Error occurred while saving YAML file: {file_path}")
         raise LaptopException(e, sys)  
 
-def save_csv_file(file_path: str, data: pd.DataFrame):
+def save_csv_file(file_path: str, data: pd.DataFrame , index = False , header = True):
     """
     Save a pandas DataFrame to a CSV file.
 
@@ -247,8 +247,8 @@ def save_csv_file(file_path: str, data: pd.DataFrame):
     try:
         dir_path = os.path.dirname(file_path)
         if dir_path:
-            os.makedirs(dir_path, exist_ok=True)
-        data.to_csv(file_path, index = False , header = False)
+            os.makedirs(dir_path, exist_ok = True)
+        data.to_csv(file_path, index = index , header = header)
         logging.info(f"CSV file saved successfully: {file_path}")
     except Exception as e:
         logging.error(f"Error occurred while saving CSV file: {file_path}")

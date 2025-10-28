@@ -23,3 +23,13 @@ class DataIngestionConfig:
     test_size : float = DATA_INGESTION_TEST_SIZE
     validation_size : float = DATA_INGESTION_VALIDATION_SIZE
     collection_name : str = DATA_INGESTION_COLLECTION_NAME
+    
+
+@dataclass
+class DataValidationConfig:
+    # artifact/timestamp/data_validation/
+    data_validation_dir : str = os.path.join(training_pipeline_config.artifact_dir , DATA_VALIDATION_DIR_NAME)
+    # artifact/timestamp/data_validation/drift_report/report.yaml
+    data_drift_file_path : str = os.path.join(data_validation_dir , DATA_VALIDATION_DRIFT_REPORT_DIR , DATA_VALIDATION_DRIFT_REPORT_FILE_NAME)
+    # schema file path
+    schema_file_path : str = SCHEMA_FILE_PATH

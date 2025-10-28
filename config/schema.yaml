@@ -1,0 +1,136 @@
+pandera_columns:
+  "Unnamed: 0":
+    dtype: int64
+    range:
+      min: 0
+      max: 1400
+  Company:
+    dtype: str
+    allowed_values:
+      - Apple
+      - HP
+      - Acer
+      - Asus
+      - Dell
+      - Lenovo
+      - Chuwi
+      - MSI
+      - Microsoft
+      - Toshiba
+      - Huawei
+      - Xiaomi
+      - Vero
+      - Razer
+      - Mediacom
+      - Samsung
+      - Google
+      - Fujitsu
+      - LG
+    nullable: false
+
+  TypeName:
+    dtype: str
+    allowed_values:
+      - Ultrabook
+      - Notebook
+      - Netbook
+      - Gaming
+      - 2 in 1 Convertible
+      - Workstation
+    nullable: false
+
+
+  ScreenResolution:
+    dtype: str
+    nullable: false
+
+  Cpu:
+    dtype: str
+    nullable: false
+
+  Ram:
+    dtype: str
+    allowed_values:
+      - 2GB
+      - 4GB
+      - 6GB
+      - 8GB
+      - 12GB
+      - 16GB
+      - 24GB
+      - 32GB
+      - 64GB
+    nullable: false
+
+  Memory:
+    dtype: str
+    nullable: false
+
+  Gpu:
+    dtype: str
+    nullable: false
+
+  OpSys:
+    dtype: str
+    allowed_values:
+      - macOS
+      - No OS
+      - Windows 10
+      - Mac OS X
+      - Linux
+      - Android
+      - Windows 10 S
+      - Chrome OS
+      - Windows 7
+    nullable: false
+
+  Weight:
+    dtype: str
+    nullable: false
+
+  Inches:
+    dtype: float64
+    range:
+      min: 10.0
+      max: 18.5
+    nullable: false
+
+  Price:
+    dtype: float64
+    range:
+      min: 9270
+      max: 324955
+    nullable: false
+
+
+columns:
+  - Company
+  - TypeName
+  - Inches
+  - ScreenResolution
+  - Cpu
+  - Ram
+  - Memory
+  - Gpu
+  - OpSys
+  - Weight
+  - Price
+
+numerical_columns:
+  - "Unnamed: 0"
+  - Inches
+  - Price
+
+categorical_columns:
+  - Company
+  - TypeName
+  - ScreenResolution
+  - Cpu
+  - Ram
+  - Memory
+  - Gpu
+  - OpSys
+  - Weight
+
+drop_columns:
+  - Unnamed: 0
