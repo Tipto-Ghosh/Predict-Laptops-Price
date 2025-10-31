@@ -133,4 +133,4 @@ categorical_columns:
   - Weight
 
 drop_columns:
-  - Unnamed: 0
+  - "Unnamed: 0"

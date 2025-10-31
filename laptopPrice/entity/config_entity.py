@@ -33,3 +33,28 @@ class DataValidationConfig:
     data_drift_file_path : str = os.path.join(data_validation_dir , DATA_VALIDATION_DRIFT_REPORT_DIR , DATA_VALIDATION_DRIFT_REPORT_FILE_NAME)
     # schema file path
     schema_file_path : str = SCHEMA_FILE_PATH
+
+
+@dataclass
+class DataTransformationConfig:
+    # artifact/timestamp/data_transformation/
+    data_transformation_dir : str = os.path.join(training_pipeline_config.artifact_dir , DATA_TRANSFORMATION_DIR_NAME)
+    # artifact/timestamp/data_transformation/transformed_data/train.npy
+    transformed_train_data_file_path : str = os.path.join(
+        data_transformation_dir , DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR , 
+        TRAIN_FILE_NAME.replace("csv" , "npy")
+    )
+    # artifact/timestamp/data_transformation/transformed_data/validation.npy
+    transformed_validation_data_file_path : str = os.path.join(
+        data_transformation_dir , DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR , 
+        VALIDATION_FILE_NAME.replace("csv" , "npy")
+    )
+    # artifact/timestamp/data_transformation/transformed_object/preprocessor.pkl
+    transformed_object_file_path : str = os.path.join(
+        data_transformation_dir , DATA_TRANSFORMATION_PREPROCESSOR_OBJECT_DIR , PREPROCESSOR_OBJECT_FILE_NAME 
+    )
+    # artifact/timestamp/data_transformation/transformed_object/feature_engineering_object.pkl
+    feature_engineering_object_file_path : str = os.path.join(
+        data_transformation_dir , DATA_TRANSFORMATION_PREPROCESSOR_OBJECT_DIR , FEATURE_ENGINEERING_FILE_NAME 
+    )
+    

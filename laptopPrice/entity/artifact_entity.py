@@ -14,4 +14,10 @@ class DataValidationArtifact:
     test_file_path: str 
     validation_file_path: str 
     data_validation_status: bool 
-    
+
+
+@dataclass
+class DataTransformationArtifact:
+    transformed_object_file_path : str
+    transformed_train_data_file_path : str
+    transformed_validation_data_file_path : str 

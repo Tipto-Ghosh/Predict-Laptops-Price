@@ -20,6 +20,7 @@ TEST_FILE_NAME = "test.csv"
 VALIDATION_FILE_NAME = "validation.csv"
 
 PREPROCESSOR_OBJECT_FILE_NAME = "preprocessor.pkl"
+FEATURE_ENGINEERING_FILE_NAME = "feature_engineering_object.pkl"
 MODEL_FILE_NAME = "model.pkl"
 
 TARGET_COLUMN : str = "Price"
@@ -41,3 +42,9 @@ DATA_INGESTION_VALIDATION_SIZE : float = 0.15 # Validation set size
 DATA_VALIDATION_DIR_NAME : str = "data_validation"
 DATA_VALIDATION_DRIFT_REPORT_DIR : str = "drift_report"
 DATA_VALIDATION_DRIFT_REPORT_FILE_NAME : str = "report.yaml"
+
+
+# Data Transformation Constants
+DATA_TRANSFORMATION_DIR_NAME : str = "data_transformation"
+DATA_TRANSFORMATION_TRANSFORMED_DATA_DIR : str = "transformed_data"
+DATA_TRANSFORMATION_PREPROCESSOR_OBJECT_DIR : str = "transformed_object"

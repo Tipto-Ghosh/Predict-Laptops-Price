@@ -6,16 +6,16 @@ from laptopPrice.logger import logging
 from laptopPrice.exception import LaptopException
 
 from laptopPrice.entity.config_entity import (
-    DataIngestionConfig , DataValidationConfig
+    DataIngestionConfig , DataValidationConfig , DataTransformationConfig
 )
 
 from laptopPrice.entity.artifact_entity import (
-    DataIngestionArtifact , DataValidationArtifact
+    DataIngestionArtifact , DataValidationArtifact , DataTransformationArtifact
 )
 
 from laptopPrice.components.data_ingestion import DataIngestion
 from laptopPrice.components.data_validation import DataValidation
-
+from laptopPrice.components.data_transformation import DataTransformation
 
 
 class TrainingPipeline:
@@ -26,7 +26,8 @@ class TrainingPipeline:
         self.data_ingestion_config = DataIngestionConfig()
         # 2. do the data validation
         self.data_validation_config = DataValidationConfig()
-    
+        # 3. do the data transformation
+        self.data_transformation_config = DataTransformationConfig()
     
     
     def start_data_ingestion(self) -> DataIngestionArtifact:
@@ -71,6 +72,24 @@ class TrainingPipeline:
         
         except Exception as e:
             raise LaptopException(e , sys)
+    
+    def start_data_transformation(self , data_validation_artifact: DataIngestionArtifact) -> DataTransformationArtifact:
+        """
+        This method of TrainPipeline class is responsible for starting data transformation component
+        """
+        
+        try:
+            logging.info("Entered start_data_transformation method from TrainingPipeline class")
+            
+            data_transformation = DataTransformation(
+                data_transformation_config = self.data_transformation_config,
+                data_validation_artifact = data_validation_artifact
+            )
+            data_transformation_artifact = data_transformation.initiate_data_transformation()
+            return data_validation_artifact
+        except Exception as e:
+            raise LaptopException(e , sys)
+        
         
     def run_training_pipeline(self):
         """ 
@@ -87,5 +106,10 @@ class TrainingPipeline:
                 data_ingestion_artifact = data_ingestion_artifact
             )
             logging.info("Data Validation Completed")
+            
+            # 3. Run the data transformation
+            data_transformation_artifact = self.start_data_transformation(data_validation_artifact = data_validation_artifact)
+            logging.info("Data transformation is Done!!")
+            
         except Exception as e:
             raise LaptopException(e , sys)

@@ -5,18 +5,17 @@ from laptopPrice.utils.common_utils import read_yaml_file
 # dvc = DataValidationConfig()
 # schema_config = read_yaml_file(dvc.schema_file_path)
 
-# print(schema_config.keys())
 
-# print(schema_config['numerical_columns'])
-
-# print(schema_config['pandera_columns'].keys())
-
+from laptopPrice.feature_engineering.feature_engineer import FeatureEngineer 
 import pandas as pd 
-from pathlib import Path  
 
-train_df_path = Path("artifacts/10_28_2025_15_40_40/data_ingestion/ingested/train.csv")
-# print(train_df_path)
-train_df = pd.read_csv(train_df_path)
+df = pd.read_csv("E:/end-to-end-machine-learning-project/Predict-Laptops-Price/notebooks/laptop_data.csv")
 
-print(train_df.head())
-print(train_df.columns)
+X = df.drop(columns = ["Price"] , axis = 1)
+y = df['Price']
+
+fe = FeatureEngineer()
+fe.fit(X , y)
+X = fe.transform(X , y)
+
+print(X.head())
