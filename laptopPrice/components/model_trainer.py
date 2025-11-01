@@ -155,6 +155,6 @@ class ModelTrainer:
                 trained_estimator_object_file_path = self.model_trainer_config.trained_estimator_object_file_path
             )
             # 7. return the model trainer artifact
-            return (model_trainer_artifact , laptopPriceEstimator)
+            return model_trainer_artifact
         except Exception as e:
             raise LaptopException(e , sys)

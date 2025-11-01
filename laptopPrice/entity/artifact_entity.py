@@ -35,4 +35,15 @@ class ModelTrainerArtifact:
     trained_model_file_path : str
     metric_artifact : RegressionMetricArtifact
     tuned_model_report_file_path : str
-    trained_estimator_object_file_path : str
+    trained_estimator_object_file_path : str 
+
+@dataclass
+class ModelEvaluationArtifact:
+    is_model_accepted : bool 
+    improved_score : float
+    best_model_path : str
+
+@dataclass
+class ModelPusherArtifact:
+    is_model_pushed: bool
+    production_model_path: str

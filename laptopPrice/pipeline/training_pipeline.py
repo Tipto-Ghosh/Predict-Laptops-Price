@@ -6,17 +6,18 @@ from laptopPrice.logger import logging
 from laptopPrice.exception import LaptopException
 
 from laptopPrice.entity.config_entity import (
-    DataIngestionConfig , DataValidationConfig , DataTransformationConfig , ModelTrainerConfig
+    DataIngestionConfig , DataValidationConfig , DataTransformationConfig , ModelTrainerConfig , ModelEvaluationConfig
 )
 
 from laptopPrice.entity.artifact_entity import (
-    DataIngestionArtifact , DataValidationArtifact , DataTransformationArtifact , ModelTrainerArtifact
+    DataIngestionArtifact , DataValidationArtifact , DataTransformationArtifact , ModelTrainerArtifact , ModelEvaluationArtifact
 )
 
 from laptopPrice.components.data_ingestion import DataIngestion
 from laptopPrice.components.data_validation import DataValidation
 from laptopPrice.components.data_transformation import DataTransformation 
 from laptopPrice.components.model_trainer import ModelTrainer
+from laptopPrice.components.model_evaluation import ModelEvaluation
 
 
 class TrainingPipeline:
@@ -31,6 +32,8 @@ class TrainingPipeline:
         self.data_transformation_config = DataTransformationConfig()
         # 4. do the model training
         self.model_trainer_config = ModelTrainerConfig()
+        # 5. do the model evaluation
+        self.model_evaluation_config = ModelEvaluationConfig()
     
     def start_data_ingestion(self) -> DataIngestionArtifact:
         """ 
@@ -102,12 +105,31 @@ class TrainingPipeline:
                 data_transformation_artifact = data_transformation_artifact
             ) 
             
-            model_trainer_artifact , wineQualityEstimator = model_trainer.initiate_model_trainer()
-            return model_trainer_artifact , wineQualityEstimator
+            model_trainer_artifact = model_trainer.initiate_model_trainer()
+            return model_trainer_artifact
         
         except Exception as e:
             raise LaptopException(e , sys)
-
+    
+    def start_model_evaluation(self , model_trainer_artifact: ModelTrainerArtifact , test_file_path: str):
+        """ 
+        This method of TrainingPipeline class is responsible for starting model evaluation
+        """    
+        try:
+            logging.info("Entered into start_model_evaluation from training pipeline")
+            
+            model_evaluation = ModelEvaluation(
+                model_evaluation_config = self.model_evaluation_config,
+                model_trainer_artifact = model_trainer_artifact,
+                test_file_path = test_file_path
+            )
+            
+            model_evaluation_artifact = model_evaluation.initiate_model_evaluation()
+            return model_evaluation_artifact
+        except Exception as e:
+            raise LaptopException(e , sys)
+        
+        
     def run_training_pipeline(self):
         """ 
         This method of TrainingPipeline class is responsible for running complete training pipeline
@@ -131,5 +153,13 @@ class TrainingPipeline:
             # 4. Run the model trainer
             model_trainer_artifact = self.start_model_trainer(data_transformation_artifact = data_transformation_artifact)
             logging.info("Model Trainer Done!")
+            
+            # 5. Run the model evaluation
+            model_evaluation_artifact = self.start_model_evaluation(
+                model_trainer_artifact = model_trainer_artifact , test_file_path = data_ingestion_artifact.test_file_path
+            )
+            logging.info("Model Evaluation Done!")
+            
+            logging.info(f"{model_evaluation_artifact.improved_score} || {model_evaluation_artifact.is_model_accepted}")
         except Exception as e:
             raise LaptopException(e , sys)

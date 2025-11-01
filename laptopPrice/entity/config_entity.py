@@ -78,3 +78,23 @@ class ModelTrainerConfig:
     trained_estimator_object_file_path : str = os.path.join(
         model_trainer_dir , MODEL_TRAINER_TRAINED_MODEL_DIR , MODEL_TRAINER_ESTIMATOR_OBJECT_FILE_NAME
     )
+
+
+# production model 
+@dataclass
+class ModelEvaluationConfig:
+    # production/model.pkl
+    production_model_path : str = PRODUCTION_MODEL_PATH
+    # at least this much improvement is required to accept a model
+    model_evaluation_threshold : float = 0.01
+
+
+@dataclass
+class ModelPusherConfig:
+    production_model_path : str = PRODUCTION_MODEL_PATH
+
+
+@dataclass
+class LaptopPricePredictionConfig:
+    model_file_path : str = PRODUCTION_MODEL_PATH
+    
