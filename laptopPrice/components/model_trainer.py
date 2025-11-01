@@ -137,6 +137,11 @@ class ModelTrainer:
                 preprocessing_object = preprocessing_object , 
                 trained_model_object = best_model_detail.best_model
             )
+            logging.info("laptopPriceEstimator Object Saved")
+            save_object(
+                file_path = self.model_trainer_config.trained_estimator_object_file_path,
+                obj = laptopPriceEstimator
+            )
             logging.info("saving LaptopPriceEstimator(feature_object + preprocessing_object + best_model_detail.best_model)")
             save_object(
                 file_path = self.model_trainer_config.trained_model_file_path , obj = best_model_detail.best_model
@@ -146,7 +151,8 @@ class ModelTrainer:
             model_trainer_artifact = ModelTrainerArtifact(
                 trained_model_file_path = self.model_trainer_config.trained_model_file_path,
                 metric_artifact = metric_artifact,
-                tuned_model_report_file_path = self.model_trainer_config.all_models_report_file_path
+                tuned_model_report_file_path = self.model_trainer_config.all_models_report_file_path,
+                trained_estimator_object_file_path = self.model_trainer_config.trained_estimator_object_file_path
             )
             # 7. return the model trainer artifact
             return (model_trainer_artifact , laptopPriceEstimator)

@@ -17,10 +17,6 @@ class TargetValueMapping:
         # mapping for actual log target value (can be extended)
         self.actual_price = {0: "Below 50K", 1: "50K-100K", 2: "Above 100K"}  
     
-    def reverse_mapping(self):
-        """Return reverse mapping dict"""
-        return {v: k for k, v in self.actual_price.items()}
-    
     def get_price(self, price: float) -> float:
         """Convert log to actual price"""
         return np.exp(price)
@@ -67,7 +63,7 @@ class LaptopPriceEstimator:
             df = input_df.copy()
             
             # Drop columns that were dropped in training
-            df = df.drop(columns = [col for col in self.drop_cols if col in df.columns] , errors = "ignore")
+            # df = df.drop(columns = [col for col in self.drop_cols if col in df.columns] , errors = "ignore" , axis = 1)
             
             df = self.feature_engineering_object.transform(df)
             
@@ -88,7 +84,7 @@ class LaptopPriceEstimator:
             # do the mapping
             if acutal_price:
                 mapper = TargetValueMapping()
-                predictions = [mapper.reverse_mapping()[p] for p in predictions]
+                predictions = [mapper.get_price(p) for p in predictions]
             
             return predictions
             

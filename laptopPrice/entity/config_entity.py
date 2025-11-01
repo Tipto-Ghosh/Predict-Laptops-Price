@@ -75,3 +75,6 @@ class ModelTrainerConfig:
     all_models_report_file_path : str = os.path.join(
         model_trainer_dir , MODEL_TRAINER_ALL_MODEL_REPORT_DIR , MODEL_TRAINER_ALL_TUNED_MODEL_REPORT_FILE_PATH
     )
+    trained_estimator_object_file_path : str = os.path.join(
+        model_trainer_dir , MODEL_TRAINER_TRAINED_MODEL_DIR , MODEL_TRAINER_ESTIMATOR_OBJECT_FILE_NAME
+    )

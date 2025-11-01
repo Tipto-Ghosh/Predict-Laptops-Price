@@ -61,4 +61,5 @@ MODEL_TRAINER_EXPECTED_SCORE : float = 0.75 # minimal r2 score
 # Reports directory for tuned models
 MODEL_TRAINER_ALL_MODEL_REPORT_DIR: str = "all_model_report"
 # File path where all tuned models' details will be saved
-MODEL_TRAINER_ALL_TUNED_MODEL_REPORT_FILE_PATH: str = "all_tuned_model_report.yaml" 
+MODEL_TRAINER_ALL_TUNED_MODEL_REPORT_FILE_PATH: str = "all_tuned_model_report.yaml"
+MODEL_TRAINER_ESTIMATOR_OBJECT_FILE_NAME : str = "estimator.pkl"
