@@ -6,16 +6,17 @@ from laptopPrice.logger import logging
 from laptopPrice.exception import LaptopException
 
 from laptopPrice.entity.config_entity import (
-    DataIngestionConfig , DataValidationConfig , DataTransformationConfig
+    DataIngestionConfig , DataValidationConfig , DataTransformationConfig , ModelTrainerConfig
 )
 
 from laptopPrice.entity.artifact_entity import (
-    DataIngestionArtifact , DataValidationArtifact , DataTransformationArtifact
+    DataIngestionArtifact , DataValidationArtifact , DataTransformationArtifact , ModelTrainerArtifact
 )
 
 from laptopPrice.components.data_ingestion import DataIngestion
 from laptopPrice.components.data_validation import DataValidation
-from laptopPrice.components.data_transformation import DataTransformation
+from laptopPrice.components.data_transformation import DataTransformation 
+from laptopPrice.components.model_trainer import ModelTrainer
 
 
 class TrainingPipeline:
@@ -28,7 +29,8 @@ class TrainingPipeline:
         self.data_validation_config = DataValidationConfig()
         # 3. do the data transformation
         self.data_transformation_config = DataTransformationConfig()
-    
+        # 4. do the model training
+        self.model_trainer_config = ModelTrainerConfig()
     
     def start_data_ingestion(self) -> DataIngestionArtifact:
         """ 
@@ -86,11 +88,26 @@ class TrainingPipeline:
                 data_validation_artifact = data_validation_artifact
             )
             data_transformation_artifact = data_transformation.initiate_data_transformation()
-            return data_validation_artifact
+            return data_transformation_artifact
         except Exception as e:
             raise LaptopException(e , sys)
         
+    def start_model_trainer(self , data_transformation_artifact: DataTransformationArtifact) -> ModelTrainerArtifact:
+        """
+        This method of TrainPipeline class is responsible for starting model training
+        """
+        try:
+            model_trainer = ModelTrainer(
+                model_trainer_config = self.model_trainer_config,
+                data_transformation_artifact = data_transformation_artifact
+            ) 
+            
+            model_trainer_artifact , wineQualityEstimator = model_trainer.initiate_model_trainer()
+            return model_trainer_artifact , wineQualityEstimator
         
+        except Exception as e:
+            raise LaptopException(e , sys)
+
     def run_training_pipeline(self):
         """ 
         This method of TrainingPipeline class is responsible for running complete training pipeline
@@ -111,5 +128,8 @@ class TrainingPipeline:
             data_transformation_artifact = self.start_data_transformation(data_validation_artifact = data_validation_artifact)
             logging.info("Data transformation is Done!!")
             
+            # 4. Run the model trainer
+            model_trainer_artifact = self.start_model_trainer(data_transformation_artifact = data_transformation_artifact)
+            logging.info("Model Trainer Done!")
         except Exception as e:
             raise LaptopException(e , sys)

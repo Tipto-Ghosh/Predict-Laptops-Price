@@ -169,7 +169,8 @@ class DataTransformation:
                 data_transformation_artifact = DataTransformationArtifact(
                     transformed_object_file_path = self.data_transformation_config.transformed_object_file_path,
                     transformed_train_data_file_path = self.data_transformation_config.transformed_train_data_file_path,
-                    transformed_validation_data_file_path = self.data_transformation_config.transformed_validation_data_file_path
+                    transformed_validation_data_file_path = self.data_transformation_config.transformed_validation_data_file_path,
+                    feature_engineering_object_file_path = self.data_transformation_config.feature_engineering_object_file_path
                 )
                 logging.info("Exited initiate_data_transformation method of Data_Transformation class")
                 return data_transformation_artifact
