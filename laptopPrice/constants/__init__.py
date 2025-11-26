@@ -66,4 +66,4 @@ MODEL_TRAINER_ESTIMATOR_OBJECT_FILE_NAME : str = "estimator.pkl"
 
 
 # Model Evaluation related constants
-PRODUCTION_MODEL_PATH : str = os.path.join("Model" , MODEL_FILE_NAME)
+PRODUCTION_MODEL_PATH : str = os.path.join("Model" , "estimator.pkl")

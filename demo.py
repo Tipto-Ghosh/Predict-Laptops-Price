@@ -4,7 +4,7 @@ import pandas as pd
 import numpy as np
 from pathlib import Path
 
-model = load_object("E:/end-to-end-machine-learning-project/Predict-Laptops-Price/artifacts/11_01_2025_17_39_04/model_trainer/trained_model/estimator.pkl")
+model = load_object("Model/estimator.pkl")
 
 validation_df = pd.read_csv("E:/end-to-end-machine-learning-project/Predict-Laptops-Price/artifacts/11_01_2025_17_39_04/data_ingestion/ingested/validation.csv")
 test_df = pd.read_csv("E:/end-to-end-machine-learning-project/Predict-Laptops-Price/artifacts/11_01_2025_17_39_04/data_ingestion/ingested/test.csv")

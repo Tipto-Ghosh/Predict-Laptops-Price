@@ -6,11 +6,11 @@ from laptopPrice.logger import logging
 from laptopPrice.exception import LaptopException
 
 from laptopPrice.entity.config_entity import (
-    DataIngestionConfig , DataValidationConfig , DataTransformationConfig , ModelTrainerConfig , ModelEvaluationConfig
+    DataIngestionConfig , DataValidationConfig , DataTransformationConfig , ModelTrainerConfig , ModelEvaluationConfig , ModelPusherConfig
 )
 
 from laptopPrice.entity.artifact_entity import (
-    DataIngestionArtifact , DataValidationArtifact , DataTransformationArtifact , ModelTrainerArtifact , ModelEvaluationArtifact
+    DataIngestionArtifact , DataValidationArtifact , DataTransformationArtifact , ModelTrainerArtifact , ModelEvaluationArtifact , ModelPusherArtifact
 )
 
 from laptopPrice.components.data_ingestion import DataIngestion
@@ -18,6 +18,7 @@ from laptopPrice.components.data_validation import DataValidation
 from laptopPrice.components.data_transformation import DataTransformation 
 from laptopPrice.components.model_trainer import ModelTrainer
 from laptopPrice.components.model_evaluation import ModelEvaluation
+from laptopPrice.components.model_pusher import ModelPusher
 
 
 class TrainingPipeline:
@@ -34,6 +35,8 @@ class TrainingPipeline:
         self.model_trainer_config = ModelTrainerConfig()
         # 5. do the model evaluation
         self.model_evaluation_config = ModelEvaluationConfig()
+        # 6. do the model pushing
+        self.model_pusher_config = ModelPusherConfig()
     
     def start_data_ingestion(self) -> DataIngestionArtifact:
         """ 
@@ -129,6 +132,22 @@ class TrainingPipeline:
         except Exception as e:
             raise LaptopException(e , sys)
         
+    def start_model_pusher(self , model_evaluation_artifact: ModelEvaluationArtifact) -> ModelPusherArtifact:
+        """ 
+        This method of TrainingPipeline class is responsible for pushing the model into production.
+        """
+        try:
+            logging.info("Entered into start_model_pusher from training pipeline")
+            
+            model_pusher = ModelPusher(
+                model_pusher_config = self.model_pusher_config , model_evaluation_artifact = model_evaluation_artifact
+            )
+            model_pusher_artifact = model_pusher.initiate_model_pusher()
+            return model_pusher_artifact
+         
+        except Exception as e:
+            raise LaptopException(e , sys)
+        
         
     def run_training_pipeline(self):
         """ 
@@ -159,7 +178,15 @@ class TrainingPipeline:
                 model_trainer_artifact = model_trainer_artifact , test_file_path = data_ingestion_artifact.test_file_path
             )
             logging.info("Model Evaluation Done!")
-            
             logging.info(f"{model_evaluation_artifact.improved_score} || {model_evaluation_artifact.is_model_accepted}")
+            
+            # 6. Run the model pusher
+            model_pusher_artifact = self.start_model_pusher(
+                model_evaluation_artifact = model_evaluation_artifact
+            )
+            
+            logging.info("Training Pipeline Completed")
+            logging.info(f"Model Pusher Status: {model_pusher_artifact.is_model_pushed}")
+            logging.info(f"Production Estimator: {model_pusher_artifact.production_model_path}")
         except Exception as e:
             raise LaptopException(e , sys)
