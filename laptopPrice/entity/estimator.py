@@ -66,15 +66,17 @@ class LaptopPriceEstimator:
             # df = df.drop(columns = [col for col in self.drop_cols if col in df.columns] , errors = "ignore" , axis = 1)
             
             df = self.feature_engineering_object.transform(df)
-            
+            logging.info(f"df features after feature engineering: {df.columns}")
+            # logging.info(f"Gpu: {df['Gpu']}")
             # Align columns with the training schema
             expected_features = getattr(self.preprocessing_object, "feature_names_in_", None)
             if expected_features is not None:
                 missing_cols = [c for c in expected_features if c not in df.columns]
+                logging.info(f"from LaptopPriceEstimator missing columns are:{missing_cols}")
                 for c in missing_cols:
                     df[c] = 0
                 df = df[expected_features]
-                
+            
             # transform using preprocessing_object
             transformed_data = self.preprocessing_object.transform(df)
             
@@ -90,7 +92,29 @@ class LaptopPriceEstimator:
             
         except Exception as e:
             raise LaptopException(e , sys)
-        
+    
+    def predict_user_info(self , input_df: DataFrame , acutal_price: bool = True) -> np.ndarray:
+        """
+        Transform raw input DataFrame and predict in one step.
+        Expects input_df to have a single row or multiple rows with same feature columns.
+        """
+        logging.info(f"Entered predict_dataframe method with input shape: {input_df.shape}")
+        try:
+            # transform using preprocessing_object
+            transformed_data = self.preprocessing_object.transform(input_df)
+            
+            # predict
+            predictions = self.trained_model_object.predict(transformed_data)
+            
+            # do the mapping
+            if acutal_price:
+                mapper = TargetValueMapping()
+                predictions = [mapper.get_price(p) for p in predictions]
+            
+            return predictions
+        except Exception as e:
+            raise LaptopException(e , sys)
+    
     def __repr__(self):
         return f"{type(self.trained_model_object).__name__}()"
 

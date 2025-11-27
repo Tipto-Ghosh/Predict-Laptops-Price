@@ -76,6 +76,8 @@ class FeatureEngineer(BaseEstimator , TransformerMixin):
 
         # extract gpu brand name 
         X['gpu_brand'] = X['Gpu'].str.split().str[0]
+        # drop the gpu column
+        X.drop(columns = ['Gpu'] , axis = 1 , inplace = True)
         X['OpSys'] = X['OpSys'].apply(self.cat_os)
         
         return X 
