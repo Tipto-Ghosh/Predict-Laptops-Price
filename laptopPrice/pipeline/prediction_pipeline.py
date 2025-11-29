@@ -25,7 +25,7 @@ class PredictPipeline:
             logging.info("Prediction pipeline started")
             # convert the custom data into a dataframe
             df = custom_data.to_dataframe()
-            
+            # logging.info(f"---------------\n {df.info()} \n --------------")
             # Make prediction
             laptop_price = self.model.predict_user_info(df)[0]
             

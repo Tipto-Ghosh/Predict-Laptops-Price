@@ -255,7 +255,12 @@
         
         // Display the predicted price
         const predictedPrice = result.price || result.prediction || result.laptop_price;
-        priceDisplay.textContent = `$${Number(predictedPrice).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2})}`;
+        priceDisplay.textContent = Number(predictedPrice).toLocaleString('en-US' , {
+          style: 'currency',
+          currency: 'INR',
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        })
         
         resultTitle.textContent = 'Predicted Price';
         resultPanel.classList.add('show');
